@@ -1,0 +1,29 @@
+
+import time
+import multiprocessing
+
+def deposit(balance):
+    for i in range(100):
+        time.sleep(0.01)
+        lock.acquire()
+        balance.value=balance.value+1
+        lock.release()
+        
+def withdraw(balance):
+    for i in range(100):
+        time.sleep(0.01)
+        lock.acquire()
+        balance.value=balance.value-1
+        lock.release()
+        
+if __name__=='__main__':       
+    balance=multiprocessing.Value('i',200)
+    de=multiprocessing.Process(target=deposit,args=(balance,))
+    wi=multiprocessing.Process(target=withdraw,args=(balance,))
+
+    de.start()
+    wi.start()
+
+    de.join()
+    wi.join()
+    print("its done",balance.value)
